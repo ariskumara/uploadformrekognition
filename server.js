@@ -5,10 +5,9 @@ var AWS = require('aws-sdk'),
 AWS.config.loadFromPath('./aws-config.json');
 
 // assume you already have the S3 Bucket created, and it is called ierg4210-shopxx-photos
-var photoBucket = new AWS.S3({params: {Bucket: '<YOUR BUCKET NAME>'}});
-var header = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection</h1>Please upload an image <br><br>'
-var bodyhtml = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection Result</h1>Below is the object detection result based on AWS Rekognition: '
-bodyhtml += '<br><a href=http://<YOUR SERVER IP ADDRESS>:<PORT>/upload>Back to Upload Page</a><br><table border=2 color=000000></tr><td>Label</td><td>Confidence</td></tr>'
+var photoBucket = new AWS.S3({params: {Bucket: '<BUCKET NAME>'}});
+var header = ''
+var bodyhtml = ''
 
 function uploadToS3(file, destFileName, callback) {
     photoBucket
@@ -33,6 +32,12 @@ var express = require('express'),
     multer = require('multer');
 
 app.get('/upload', function (req, res) {
+    
+    header = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection</h1>Please upload an image <br><br>'
+    bodyhtml = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection Result</h1>Below is the object detection result based on AWS Rekognition: '
+    bodyhtml += '<br><table border=2 color=000000></tr><td>Label</td><td>Confidence</td></tr>'
+    
+    
     res.status(200)
         .send(header + '<form method="POST" enctype="multipart/form-data">'
             + '<input type="file" name="file1"/><input type="submit"/>'
@@ -64,7 +69,7 @@ app.post('/upload', multer({limits: {fileSize:10*1024*1024}}), function (req, re
         var params = {
           Image: {
             S3Object: {
-              Bucket: '<YOUR BUCKET NAME>',
+              Bucket: '<BUCKET NAME>',
               Name: pid
             },
           },
@@ -92,8 +97,8 @@ app.post('/upload', multer({limits: {fileSize:10*1024*1024}}), function (req, re
               console.log("")
               
             }) // for response.labels
-            bodyhtml += '</table>'
-            bodyhtml += '<br><br>' + 'File uploaded to S3: ' + data.Location.replace(/</g, '&lt;') 
+            bodyhtml += '</table><br><br><a href=http://<YOUR SERVER IP>:<PORT>/upload>Back to Upload Page</a><br>'
+            bodyhtml += '<br>' + 'File uploaded to S3: ' + data.Location.replace(/</g, '&lt;') 
             
             var img = data.Location.replace(/"/g, '&quot;') 
             
@@ -105,7 +110,9 @@ app.post('/upload', multer({limits: {fileSize:10*1024*1024}}), function (req, re
             res.write(bodyhtml);
             console.log('end')
         
+            
             res.end();
+            
           } // if
         });
         }
