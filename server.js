@@ -5,10 +5,10 @@ var AWS = require('aws-sdk'),
 AWS.config.loadFromPath('./aws-config.json');
 
 // assume you already have the S3 Bucket created, and it is called ierg4210-shopxx-photos
-var photoBucket = new AWS.S3({params: {Bucket: 'uploadgambar'}});
+var photoBucket = new AWS.S3({params: {Bucket: '<YOUR BUCKET NAME>'}});
 var header = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection</h1>Please upload an image <br><br>'
 var bodyhtml = '<html><title>AWS Object Detection Demo</title><body><h1>AWS Object Detection Result</h1>Below is the object detection result based on AWS Rekognition: '
-bodyhtml += '<br><a href=http://52.220.83.252:8080/upload>Back to Upload Page</a><br><table border=2 color=000000></tr><td>Label</td><td>Confidence</td></tr>'
+bodyhtml += '<br><a href=http://<YOUR SERVER IP ADDRESS>:<PORT>/upload>Back to Upload Page</a><br><table border=2 color=000000></tr><td>Label</td><td>Confidence</td></tr>'
 
 function uploadToS3(file, destFileName, callback) {
     photoBucket
@@ -64,7 +64,7 @@ app.post('/upload', multer({limits: {fileSize:10*1024*1024}}), function (req, re
         var params = {
           Image: {
             S3Object: {
-              Bucket: 'uploadgambar',
+              Bucket: '<YOUR BUCKET NAME>',
               Name: pid
             },
           },
