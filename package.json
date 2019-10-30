@@ -1,0 +1,13 @@
+{
+  "name": "multer-to-s3-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "aws-sdk": "^2.1.17",
+    "express": "^4.12.2",
+    "multer": "^0.1.8"
+  },
+  "author": "Adonis Fung",
+  "license": "BSD"
+}
